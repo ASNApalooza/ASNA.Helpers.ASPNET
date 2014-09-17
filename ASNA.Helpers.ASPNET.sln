@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{A99171F4-43ED-48FC-978B-9193EDE4E466}") = "ASNA.Helpers.ASPNET", "ASNA.Helpers.ASPNET\ASNA.Helpers.ASPNET.vrproj", "{564D63AC-F6A9-4086-9535-2B510B88935C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{564D63AC-F6A9-4086-9535-2B510B88935C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{564D63AC-F6A9-4086-9535-2B510B88935C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{564D63AC-F6A9-4086-9535-2B510B88935C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{564D63AC-F6A9-4086-9535-2B510B88935C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

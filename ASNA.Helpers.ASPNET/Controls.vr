@@ -1,0 +1,36 @@
+﻿Using System
+Using System.Text
+Using System.Web
+Using System.Web.Security
+Using System.Web.UI
+Using System.Web.UI.WebControls
+Using System.Web.UI.WebControls.WebParts
+Using System.Web.UI.HtmlControls
+
+
+DclNamespace ASNA.Helpers.ASPNET
+
+BegClass Controls Access(*Public)
+
+    BegSr AddHTMLHeaderAndFooter Access(*Public) Shared(*Yes)
+        DclSrParm Grid Type(GridView)
+
+        // http://msdn.microsoft.com/en-us/library/system.web.ui.webcontrols.gridviewrow_properties(v=vs.110).aspx
+        // Use the HeaderRow property to programmatically access the GridViewRow object that represents the header 
+        // row in a GridView control. (There is a corresponding FooterRow property for the footer.)
+        // http://msdn.microsoft.com/en-us/library/system.web.ui.webcontrols.tablerow.tablesection(v=vs.110).aspx
+        
+        If (Grid.Rows.Count > 0)
+            // This replaces <td> with <th> and adds the scope attribute.
+            Grid.UseAccessibleHeader = *True
+
+            // This will add the <thead> and <tbody> elements.
+            Grid.HeaderRow.TableSection = TableRowSection.TableHeader
+
+            // This adds the <tfoot> element. 
+            // Remove if you don't have a footer row.
+            Grid.FooterRow.TableSection = TableRowSection.TableFooter
+        EndIf
+    EndSr
+
+EndClass
