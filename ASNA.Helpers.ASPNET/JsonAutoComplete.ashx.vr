@@ -20,7 +20,7 @@ BegClass JsonAutoComplete Access(*Public)  Implements(IHttpHandler)
 
     BegSr GetArgs
         DclSrParm Context Type(HttpContext)
-        DclSrParm Args    Type(ASNA.Helpers.DataServices.DataListInstanceArgs) 
+        DclSrParm Args    Type(ASNA.Helpers.DataServices.QueryFileInstanceArgs) 
 
         args.library  = GetQueryStringValue(Context,"library")
         args.file     = GetQueryStringValue(Context,"file")
@@ -32,7 +32,7 @@ BegClass JsonAutoComplete Access(*Public)  Implements(IHttpHandler)
 
     BegSr CollectQueryFields 
         DclSrParm Context Type(HttpContext)
-        DclSrParm Args    Type(ASNA.Helpers.DataServices.DataListInstanceArgs) 
+        DclSrParm Args    Type(ASNA.Helpers.DataServices.QueryFileInstanceArgs) 
 
         DclFld i          Type(*Integer4)
         DclFld Field      Type(*String)
@@ -61,7 +61,7 @@ BegClass JsonAutoComplete Access(*Public)  Implements(IHttpHandler)
         DclSrParm Context Type(HttpContext)
 
         DclFld QFile   Type(ASNA.Helpers.DataServices.QueryFile)
-        DclFld Args     Type(ASNA.Helpers.DataServices.DataListInstanceArgs) New()
+        DclFld Args     Type(ASNA.Helpers.DataServices.QueryFileInstanceArgs) New()
         DclFld db       Type(AdgConnection)
         DclFld Json     Type(*String)
         DclFld DBName   Type(*String) 
