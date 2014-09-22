@@ -22,11 +22,11 @@ BegClass JsonAutoComplete Access(*Public)  Implements(IHttpHandler)
         DclSrParm Context Type(HttpContext)
         DclSrParm Args    Type(ASNA.Helpers.DataServices.QueryFileInstanceArgs) 
 
-        args.library  = GetQueryStringValue(Context,"library")
-        args.file     = GetQueryStringValue(Context,"file")
-        args.fields   = GetQueryStringValue(Context,"fields")
-        args.rows     = GetQueryStringValue(Context,"rows")
-        args.Query    = GetQueryStringValue(Context,"query")
+        args.Inputs.library      = GetQueryStringValue(Context,"library")
+        args.Inputs.file         = GetQueryStringValue(Context,"file")
+        args.Inputs.fieldsList   = GetQueryStringValue(Context,"fieldsList")
+        args.Inputs.rows         = GetQueryStringValue(Context,"rows")
+        args.Inputs.Query        = GetQueryStringValue(Context,"query")
         CollectQueryFields(Context,Args) 
     EndSr
 
@@ -42,7 +42,7 @@ BegClass JsonAutoComplete Access(*Public)  Implements(IHttpHandler)
             Field = String.Format("qryfld{0}",i)
             Value = String.Format("qryval{0}",i)
             If (context.Request[Field] AND context.Request[Value])
-                Args.QueryFields.Add(*New ASNA.Helpers.DataServices.QueryField(context.Request[Field],context.Request[Value]))
+                Args.Inputs.QueryFields.Add(*New ASNA.Helpers.DataServices.QueryField(context.Request[Field],context.Request[Value]))
             EndIf
         EndDo
     EndSr
@@ -60,13 +60,13 @@ BegClass JsonAutoComplete Access(*Public)  Implements(IHttpHandler)
     BegSr ProcessRequest Access(*Public) Implements(IHttpHandler.ProcessRequest)
         DclSrParm Context Type(HttpContext)
 
-        DclFld QFile   Type(ASNA.Helpers.DataServices.QueryFile)
-        DclFld Args     Type(ASNA.Helpers.DataServices.QueryFileInstanceArgs) New()
-        DclFld db       Type(AdgConnection)
-        DclFld Json     Type(*String)
-        DclFld DBName   Type(*String) 
-        DclFld ActiveDBName Type(*String) 
-        DclFld Result   Type(*Boolean)
+        DclFld QFile         Type(ASNA.Helpers.DataServices.QueryFile)
+        DclFld Args          Type(ASNA.Helpers.DataServices.QueryFileInstanceArgs) New()
+        DclFld JsonAdapter   Type(ASNA.Helpers.DataServices.ToJsonAdapter) 
+        DclFld db            Type(AdgConnection)
+        DclFld Json          Type(*String)
+        DclFld DBName        Type(*String) 
+        DclFld ActiveDBName  Type(*String) 
 
         Try 
             ActiveDBName =  ConfigurationManager.AppSettings["ActiveDBName"]
@@ -74,12 +74,12 @@ BegClass JsonAutoComplete Access(*Public)  Implements(IHttpHandler)
             db = *New AdgConnection(DBName)
             db.Open()
             GetArgs(Context,Args)
+            Args.Inputs.Options.Add("indentJson",*True)
+            JsonAdapter = *New ASNA.Helpers.DataServices.ToJsonAdapter(Args) 
 
-            QFile = *New ASNA.Helpers.DataServices.QueryFile(db,args)
-            QFile.IndentJson = *True
+            QFile = *New ASNA.Helpers.DataServices.QueryFile(db,args,JsonAdapter)
 
-            Result = QFile.GetList()
-            Json = QFile.ListAsJson
+            Json = QFile.GetList() *As *String
         Catch Error Type(System.Exception) 
             Throw Error 
         EndTry 

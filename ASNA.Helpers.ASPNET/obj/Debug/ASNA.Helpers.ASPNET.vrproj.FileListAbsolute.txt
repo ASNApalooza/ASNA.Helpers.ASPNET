@@ -8,3 +8,5 @@ C:\rpDocuments\Programming\AVR\Other\ASNA.Helpers.ASPNET\ASNA.Helpers.ASPNET\bin
 C:\rpDocuments\Programming\AVR\Other\ASNA.Helpers.ASPNET\ASNA.Helpers.ASPNET\bin\Debug\Newtonsoft.Json.xml
 C:\rpDocuments\Programming\AVR\Other\ASNA.Helpers.ASPNET\ASNA.Helpers.ASPNET\obj\Debug\ASNA.Helpers.ASPNET.dll
 C:\rpDocuments\Programming\AVR\Other\ASNA.Helpers.ASPNET\ASNA.Helpers.ASPNET\obj\Debug\ASNA.Helpers.ASPNET.pdb
+C:\rpDocuments\Programming\AVR\Other\ASNA.Helpers.ASPNET\ASNA.Helpers.ASPNET\bin\Debug\ClosedXML.dll
+C:\rpDocuments\Programming\AVR\Other\ASNA.Helpers.ASPNET\ASNA.Helpers.ASPNET\bin\Debug\ClosedXML.xml
