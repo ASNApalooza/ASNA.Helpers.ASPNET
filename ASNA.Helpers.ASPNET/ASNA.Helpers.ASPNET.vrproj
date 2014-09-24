@@ -54,10 +54,6 @@
       <SubType>
       </SubType>
     </Compile>
-    <Compile Include="ExcelOutput.vr">
-      <SubType>
-      </SubType>
-    </Compile>
     <Compile Include="JsonAutoComplete.ashx.vr">
       <SubType>
       </SubType>

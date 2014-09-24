@@ -1,5 +1,7 @@
 ﻿Using System
 Using System.Data
+Using System.Collections
+Using System.Collections.Specialized
 Using System.Configuration
 Using System.Web
 Using System.Web.Security
@@ -52,6 +54,7 @@ BegClass ExcelOutput Access(*Public)  Implements(IHttpHandler)
         DclSrParm Context Type(HttpContext)
         DclSrParm Key     Type(*String)
 
+
         If (Context.Request[Key] = *Nothing)             
             Throw *New ArgumentException(Key + " argument not provided.")             
         EndIf 
@@ -75,6 +78,8 @@ BegClass ExcelOutput Access(*Public)  Implements(IHttpHandler)
             db = *New AdgConnection(DBName)
             db.Open()
             Query = *New ASNA.Helpers.DataServices.QueryDriver(db)
+
+
 
             GetArgs(Context,Query)
             ExcelAdapter = *New ASNA.Helpers.DataServices.ToExcelAdapter(Query.Args) 
