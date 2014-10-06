@@ -8,6 +8,7 @@
     </dependencies>
     <files>
         <file fileName="/JsonAutoComplete.ashx" sourceFolder="/ASHX%20files" targetFolder="\services"></file>
+        <file fileName="/ExcelOutput.ashx" sourceFolder="/ASHX%20files" targetFolder="\services"></file>
         <file fileName="/concentric-spinner.gif" sourceFolder="/public/images" targetFolder="\public\images"></file>
         <file fileName="/icon-alert.png" sourceFolder="/public/images" targetFolder="\public\images"></file>
         <file fileName="/ASNAHelper.AutoComplete.js" sourceFolder="/public/js" targetFolder="\public\js"></file>
