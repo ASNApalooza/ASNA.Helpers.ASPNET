@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<package name="asna-data-services" 
+<package name="asna-aspnet-helpers" 
          location="https://github.com/ASNApalooza/ASNA.Helpers.ASPNET/blob/master/ASNA.Helpers.ASPNET"
          postInstallUrl="http://asna.com" >     
     <dependencies>
