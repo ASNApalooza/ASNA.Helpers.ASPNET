@@ -42,7 +42,7 @@ BegClass JsonAutoComplete Access(*Public)  Implements(IHttpHandler)
             Field = String.Format("qryfld{0}",i)
             Value = String.Format("qryval{0}",i)
             If (context.Request[Field] AND context.Request[Value])
-                Args.Inputs.QueryFields.Add(*New ASNA.Helpers.DataServices.QueryField(context.Request[Field],context.Request[Value]))
+                Args.Inputs.QueryParms.Add(*New ASNA.Helpers.DataServices.QueryField(context.Request[Field],context.Request[Value]))
             EndIf
         EndDo
     EndSr
@@ -77,6 +77,7 @@ BegClass JsonAutoComplete Access(*Public)  Implements(IHttpHandler)
             Query.OverrideAdapter(*New ASNA.Helpers.DataServices.ToJsonAdapter(Query.Args))
 
             Json = Query.Exec() *As *String
+            db.Close()
         Catch Error Type(System.Exception) 
             Throw Error 
         EndTry 
