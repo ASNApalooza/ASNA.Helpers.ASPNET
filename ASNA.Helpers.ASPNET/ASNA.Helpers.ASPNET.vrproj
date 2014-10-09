@@ -40,6 +40,9 @@
     <Reference Include="log4net">
       <HintPath>..\..\..\..\CS\Other\ProjectInstaller\ProjectInstaller\bin\Release\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\..\Web\jQueryDataTable\bin\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration">
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Configuration.dll</HintPath>
@@ -57,11 +60,11 @@
       <SubType>
       </SubType>
     </Compile>
-    <Compile Include="ExcelOutput.ashx.vr">
+    <Compile Include="ExcelService.ashx.vr">
       <SubType>
       </SubType>
     </Compile>
-    <Compile Include="JsonAutoComplete.ashx.vr">
+    <Compile Include="JsonService.ashx.vr">
       <SubType>
       </SubType>
     </Compile>

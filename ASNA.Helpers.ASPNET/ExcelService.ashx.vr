@@ -9,7 +9,7 @@ Using System.IO
 
 DclNameSpace ASNA.Helpers.ASPNET
 
-BegClass ExcelOutput Access(*Public) Implements (IHttpHandler)
+BegClass ExcelService Access(*Public) Implements (IHttpHandler)
 
     BegSr ProcessRequest Access(*Public) Implements(IHttpHandler.ProcessRequest)
         DclSrParm Context Type(HttpContext)

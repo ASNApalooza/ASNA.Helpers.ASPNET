@@ -1,0 +1,109 @@
+﻿Using System
+Using System.Data
+Using System.Text 
+Using System.Configuration
+Using System.Web
+Using System.Web.Security
+Using System.Web.UI
+Using System.Web.UI.WebControls
+Using System.Web.UI.WebControls.WebParts
+Using System.Web.UI.HtmlControls
+Using System.IO 
+Using Newtonsoft.Json
+Using ASNA.DataGate.Client 
+
+DclNameSpace ASNA.Helpers.ASPNET
+
+BegClass JsonService Access(*Public) Implements (IHttpHandler)
+
+    BegSr ProcessRequest Access(*Public) Implements(IHttpHandler.ProcessRequest)
+        DclSrParm context Type(HttpContext)
+
+        DclFld Json Type(*String) 
+        DclFld inputStream Type(StreamReader) 
+        DclFld Inputs Type(ASNA.Helpers.DataServices.QueryFileInstanceArgs.InputArgs) 
+        DclFld JsonResponse Type(*String) 
+
+        context.Current.Request.InputStream.Position = 0
+        inputStream = *New StreamReader(HttpContext.Current.Request.InputStream)
+        Json = inputStream.ReadToEnd()       
+
+        Inputs = JsonConvert.DeserializeObject(Json,*TypeOf(ASNA.Helpers.DataServices.QueryFileInstanceArgs.InputArgs)) *As ASNA.Helpers.DataServices.QueryFileInstanceArgs.InputArgs
+        JsonResponse = GetJsonFromServer(Inputs)
+
+        context.Response.ContentType = "application/json"
+        context.Response.Write(JsonResponse) 
+    EndSr
+
+    BegFunc GetJsonFromServer Type(*String) 
+        DclSrParm Inputs Type(ASNA.Helpers.DataServices.QueryFileInstanceArgs.InputArgs)
+
+        DclFld ActiveDBName Type(*String)
+        DclFld DBName       Type(*String) 
+        DclFld db           Type(ASNA.DataGate.Client.AdgConnection)        
+        DclFld Query        Type(ASNA.Helpers.DataServices.QueryDriver)
+        DclFld Json         Type(*String) 
+
+        ActiveDBName =  ConfigurationManager.AppSettings["ActiveDBName"]
+        DBName =  ConfigurationManager.AppSettings[ActiveDBName]
+        db = *New AdgConnection(DBName)
+
+        Query = *New ASNA.Helpers.DataServices.QueryDriver(db)
+        Query.Args.Inputs = Inputs
+
+        Query.OverrideAdapter(*New ASNA.Helpers.DataServices.ToJsonAdapter(Query.Args)) 
+        Query.Args.Inputs.Options.Add("indentJson",*True)
+
+        Json = Query.Exec() *As *String
+
+        If (Query.Args.Error.ErrorException <> *Nothing)
+            Json = GetErrorJson(Query.Args.Error.ErrorException)
+        EndIf 
+        db.Close()
+
+        LeaveSr Json 
+    EndFunc 
+
+    BegFunc GetErrorJson Type(*String)
+        DclSrParm ErrorException Type(System.Exception) 
+
+        DclFld sb                   Type(StringBuilder) New()
+        DclFld sw                   Type(StringWriter) New(sb)
+        DclFld Writer               Type(JsonWriter)
+
+        Writer = *New JsonTextWriter(sw)
+        Writer.Formatting = *True 
+        Writer.WriteStartObject()
+        
+        Writer.WritePropertyName("error")
+        Writer.WriteStartObject()
+            Writer.WritePropertyName("message")             
+            Writer.WriteValue(ErrorException.Message)
+            If (ErrorException.Message.ToUpper().Trim() = "KEY FIELD NOT FOUND")
+                Writer.WritePropertyName("note") 
+                Writer.WriteValue("DataGate 'Key field not found' usually means file key or query parm was incorrect.")
+            ElseIf (ErrorException.Message.ToUpper().Trim() = "OBJECT NOT FOUND")
+                Writer.WritePropertyName("note") 
+                Writer.WriteValue("DataGate 'Object not found' usually means file or library not found.")
+            EndIf 
+            Writer.WritePropertyName("source")
+            Writer.WriteValue(ErrorException.Source)
+        Writer.WriteEndObject()
+
+
+        Writer.WriteEndObject()
+        Writer.Close()
+
+        LeaveSr sb.ToString()
+    EndFunc 
+
+
+    BegProp IsReusable Type(*Boolean) Access(*Public) Implements(IHttpHandler.IsReusable)
+        BegGet
+            LeaveSr *False
+        EndGet
+    EndProp
+
+
+EndClass
+
