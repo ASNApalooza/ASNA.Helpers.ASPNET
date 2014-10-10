@@ -60,7 +60,7 @@
       <SubType>
       </SubType>
     </Compile>
-    <Compile Include="ExcelService.ashx.vr">
+    <Compile Include="Excel.vr">
       <SubType>
       </SubType>
     </Compile>

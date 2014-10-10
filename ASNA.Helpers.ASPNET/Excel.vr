@@ -1,0 +1,81 @@
+﻿Using System
+Using System.Data
+Using System.Configuration
+Using System.Web
+Using System.Web.Security
+Using System.Web.UI
+Using System.Web.UI.WebControls
+Using System.Web.UI.WebControls.WebParts
+Using System.Web.UI.HtmlControls
+Using ClosedXMl.Excel
+Using ASNA.DataGate.Client 
+
+DclNameSpace ASNA.Helpers.ASPNET
+
+BegClass ExcelExport Access(*Public)
+
+	BegConstructor Access(*Public)
+
+		//
+		// TODO: Add constructor logic here
+		//
+	EndConstructor
+
+    DclFld _ErrorException Type(System.Exception) 
+    BegProp ErrorException Type(System.Exception) Access(*Public) 
+        BegGet
+            LeaveSr _ErrorException
+        EndGet
+    EndProp
+
+    DclFld logger Type(log4Net.ILog) 
+
+    BegFunc CreateSpreadsheet Type(*Boolean) Access(*Public)
+        DclSrParm Context     Type(HttpContext) 
+        DclSrParm QueryInputs Type(ASNA.Helpers.DataServices.QueryFileInstanceArgs.InputArgs)
+
+        DclFld ActiveDBName  Type(*String)
+        DclFld DBName        Type(*String) 
+        DclFld db            Type(ASNA.DataGate.Client.AdgConnection)        
+        DclFld Query         Type(ASNA.Helpers.DataServices.QueryDriver)
+        DclFld ExcelAdapter  Type(ASNA.Helpers.DataServices.ToExcelAdapter)
+        DclFld WorkBook      Type(XLWorkBook) 
+        DclFLd MemStream     Type(System.IO.MemoryStream) 
+
+        logger = log4Net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType)
+
+        logger.Info("Hello, world from the new Excel class.")
+
+        ActiveDBName = ConfigurationManager.AppSettings["ActiveDBName"]
+        DBName = ConfigurationManager.AppSettings[ActiveDBName]
+        db = *New AdgConnection(DBName)
+
+        Query = *New ASNA.Helpers.DataServices.QueryDriver(db)
+        Query.Args.Inputs = QueryInputs
+        ExcelAdapter = *New ASNA.Helpers.DataServices.ToExcelAdapter(Query.Args) 
+        Query.OverrideAdapter(ExcelAdapter)
+
+        WorkBook = Query.Exec() *As XLWorkBook
+        db.Close()            
+        If (Query.Args.Error.ErrorException <> *Nothing) 
+            *This._ErrorException = Query.Args.Error.ErrorException
+              logger.Info("QueryFile exception",Query.Args.Error.ErrorException) 
+            LeaveSr *False
+        EndIf 
+
+        MemStream = *New System.IO.MemoryStream() 
+            
+        Context.Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        //Context.Response.ContentType = "application/json"
+        Context.Response.AddHeader("content-disposition", "attachment;filename=HelloWorld.xlsx")
+
+        WorkBook.SaveAs(MemStream)
+        MemStream.WriteTo(Context.Response.OutputStream) 
+        MemStream.Dispose()
+
+        Context.Response.End()
+
+        LeaveSr *True 
+    EndFunc 
+
+EndClass
