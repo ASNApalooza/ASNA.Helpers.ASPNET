@@ -1,18 +1,17 @@
 # ASNA.Helpers.ASPNET
 
-This project provides several components for making it easier to create ASP.NET applications. 
+This project provides several components for making it easier to create ASP.NET applications. These components are all helper component's for Walter. However, if you are familiar with JavaScript, you could customize this code in any way you want.   
 
-### Classes
-
-This is a summary of what's included in this project. See below for more detail.
+The following is a summary of what's included in this project. See below for more detail.
 
 * **Web control helpers** This class provides miscellaneous helper classes for ASP.NET pages and controls.
 * **JsonAutoComplete** An HTTP handler, and its ASHX page, that uses the ASNA.Helpers.DataServices namespace to easily provide JSON data.
 * **Excel HTTP helper class.** An HTTP handler, that works with the ASNA.Helpers.DataServices Excel output adapter to redirect its Excel spreadsheets through HTTP for ASP.NET use.
-* **jQuery/jQueryUI/Underscore** These are the client-side components the AutoComplete needs.
+* **jQuery/jQueryUI/Underscore** These are the client-side JavaScript libraries that Walter uses. 
 
-The ComponentInstaller's `asna-helpers-dataservices` package installs this project's components into your project. After installing that package, the following files will have been written to your project. The ComponentInstaller creates all necessary target folders and it overrides any like-named files in the folders specified.
+The ComponentInstaller's `asna-helpers-aspnet` package installs this project's components into your project. After installing that package, the following files will have been written to your project. The ComponentInstaller creates all necessary target folders and it overrides any like-named files in the folders specified.
 
+## Files installed 
 The `asna-helpers-dataservices` package has a dependence on the `asna-helpers-dataservices` package. Some of the files shown below is installed with that package.    
 
 <pre>
@@ -81,6 +80,41 @@ The `asna-helpers-dataservices` package has a dependence on the `asna-helpers-da
     |       JsonService.ashx
     |
 </pre>
+
+## Database naming
+
+The ASNA.Helpers.ASPNET database components expect to find the DataGate database name indirectly referenced by the `appSettings` key `ActiveDBName` in `Web.config.` At the least your app needs to provide two `appSettings` keys: one for `ActiveDBName` and one being referenced by the `ActiveDBName` key value. This scheme lets you provide as many database names as necessary in `Web.config`, while using `ActiveDBName` to indicate which one is currently the active database name.
+
+<pre>0001  &lt;?xml version=&quot;1.0&quot;?&gt;
+0002  &lt;!--
+0003    For more information on how to configure your ASP.NET application, please visit
+0004    http://go.microsoft.com/fwlink/?LinkId=169433
+0005    --&gt;
+0006  &lt;configuration&gt;
+0007    &lt;appSettings&gt;
+0008      &lt;add key=&quot;ActiveDBName&quot; value=&quot;local&quot;/&gt;
+0009      &lt;add key=&quot;Local&quot; value=&quot;*Public/DG NET Local&quot;/&gt;
+0010      &lt;add key=&quot;Cypress&quot; value=&quot;*Public/Cypress&quot;/&gt;
+0011    &lt;/appSettings&gt;
+0012    &lt;system.web&gt;
+0013      &lt;compilation debug=&quot;true&quot; targetFramework=&quot;4.5&quot;/&gt;
+0014    &lt;/system.web&gt;
+0015  &lt;/configuration&gt;
+</pre>
+
+The appSettings-driven database naming scheme above is required for the ASNA.Helpers.ASPNET database components. The code below shows how to fetch the active database name from the `appSettings` keys if you want to use the values in your own code.
+
+<pre>DclFld ActiveDBName  Type(*String)
+DclFld DBName        Type(*String) 
+
+ActiveDBName = System.Configuration.ConfigurationManager.AppSettings["ActiveDBName"]
+DBName = System.Configuration.ConfigurationManager.AppSettings[ActiveDBName]
+// DBName now contains the name of the currently active DataGate database name.
+</pre>
+
+
+
+## jQueryUI AutoComplete
       
 The file below shows a minimal ASPX page that uses the jQueryUI AutoComplete. 
 
@@ -117,7 +151,18 @@ The file below shows a minimal ASPX page that uses the jQueryUI AutoComplete.
 0030  &lt;/html&gt;
 </pre>
 
-Example JavaScript needed to provide a jQueryUI AutoComplete for the ASPX page shown above:
+From the code above, the following lines need to be included in your ASPX pages to use Walter's jQueryUI AutoComplete. If you used the `ComponentInstaller` to install the `asna-helpers-aspnet` package, use exactly the paths shown; otherwise you might need to to change the paths to match your app's configuration.
+
+#### Code annotation
+* Line 8: Reference the jQueryUI CSS included with jQueryUI's AutoComplete. This example uses the Smoothness theme, but you can change it to use any of the other jQueryUI themes.    
+* Line 9: Reference the jQueryAutoComplete.css file that the `asna-helpers-aspnet1 package provides. This file provides a couple of tweaks to jQueryUI's AutoComplete CSS so that a spinner is shown while fetching data.
+* Line 15: This ASP.NET TextBox is where the user starts typing what is known of the customer name. After about a 300ms pause in typing, the value entered is used to look up the customer.
+* Line 19: This ASP.NET TextBox is where the value produced from the lookup is placed. 
+* Line 24-27: Reference the four JavaScript files provided by the `asna-helpers-aspnet` package. Be sure to include them in the order shown. 
+* Line 28: This line references the small amount of JavaScript you need to provide to configure the Walter's jQueryUI AutoComplete. It's contents are shown next. 
+
+#### The JavaScript you need to provide for each lookup
+Example JavaScript needed to provide a jQueryUI AutoComplete for the ASPX page shown above. These 14 lines comprise the AutoComplete.aspx.js file referenced in line 28 of the ASPX page (as discussed in the code annotation above).
 
 <pre>0001  $(function () {
 0002      var ACCustomerName = new ASNAHelpers.QueryInputArgs();
@@ -135,31 +180,5 @@ Example JavaScript needed to provide a jQueryUI AutoComplete for the ASPX page s
 0014  });
 </pre>
 
-The ASNA.Helpers.ASPNET database components expect to find the DataGate database name indirectly referenced by the `appSettings` key `ActiveDBName` in `Web.config.` At the least your app needs to provide two `appSettings` keys: one for `ActiveDBName` and one being referenced by the `ActiveDBName` key value. This scheme lets you provide as many database names as necessary in `Web.config`, while using `ActiveDBName` to indicate which one is currently the active database name.
+The declarative JavaScript shown above is the only JavaScript you need to write to configure Walter's jQueryUI AutoComplete. See <a href="http://asnapalooza.github.io/ASNA.Helpers.DataServices.site/#qf-jquery-autocomplete">this link</a> for more details on using Walter's implementation of the jQueryUI Autocomplete. 
 
-<pre>0001  &lt;?xml version=&quot;1.0&quot;?&gt;
-0002  &lt;!--
-0003    For more information on how to configure your ASP.NET application, please visit
-0004    http://go.microsoft.com/fwlink/?LinkId=169433
-0005    --&gt;
-0006  &lt;configuration&gt;
-0007    &lt;appSettings&gt;
-0008      &lt;add key=&quot;ActiveDBName&quot; value=&quot;local&quot;/&gt;
-0009      &lt;add key=&quot;Local&quot; value=&quot;*Public/DG NET Local&quot;/&gt;
-0010      &lt;add key=&quot;Cypress&quot; value=&quot;*Public/Cypress&quot;/&gt;
-0011    &lt;/appSettings&gt;
-0012    &lt;system.web&gt;
-0013      &lt;compilation debug=&quot;true&quot; targetFramework=&quot;4.5&quot;/&gt;
-0014    &lt;/system.web&gt;
-0015  &lt;/configuration&gt;
-</pre>
-
-The appSettings-driven database naming scheme above is required for the ASNA.Helpers.ASPNET database components. The code below shows how to fetch the active database name from the `appSettings` keys if you want to use the values in your own code.
-
-<pre>DclFld ActiveDBName  Type(*String)
-DclFld DBName        Type(*String) 
-
-ActiveDBName = System.Configuration.ConfigurationManager.AppSettings["ActiveDBName"]
-DBName = System.Configuration.ConfigurationManager.AppSettings[ActiveDBName]
-// DBName now contains the name of the currently active DataGate database name.
-</pre>
