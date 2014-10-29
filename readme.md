@@ -37,7 +37,10 @@ The `asna-helpers-dataservices` package has a dependence on the `asna-helpers-da
     |   +---images
     |   |       concentric-spinner.gif
     |   |       icon-alert.png
-    |   |       
+    |   |     
+    |   +---css
+    |   |       jQueryAutoComplete.css
+    |   |  
     |   +---js
     |   |       ASNAHelpers.QueryInputArgs.js
     |   |       jQueryAutoComplete.aspx.js
@@ -78,51 +81,85 @@ The `asna-helpers-dataservices` package has a dependence on the `asna-helpers-da
     |       JsonService.ashx
     |
 </pre>
-
-asdf
-       
+      
+The file below shows a minimal ASPX page that uses the jQueryUI AutoComplete. 
 
 <pre>
 0001  &lt;%@ Page Language=&quot;AVR&quot; AutoEventWireup=&quot;false&quot; CodeFile=&quot;AutoComplete.aspx.vr&quot; Inherits=&quot;views_AutoComplete&quot; %&gt;
 0002  
-0003  &lt;!DOCTYPE html&quot;&gt;
-0004  &lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot; &gt;
-0005  &lt;head runat=&quot;server&quot;&gt;
-0006      &lt;title&gt;Example AutoComplete&lt;/title&gt;
-0007  
-0008     &lt;link rel=&quot;stylesheet&quot; href=&quot;/public/vendor/jquery-ui/themes/smoothness/jquery-ui.min.css&quot;&gt;
-0009  
-0010     &lt;style&gt;
-0011     .ui-autocomplete-loading {
-0012      background-image: url(&#39;/public/images/concentric-spinner.gif&#39;);
-0013      background-position: 98% 50%;
-0014      background-repeat: no-repeat;
-0015  }
-0016  
-0017      .my-ui-icon-alert {
-0018          background: white url(&#39;../images/icon-alert.png&#39;) right center no-repeat;
-0019      }
-0020  &lt;/style&gt;
-0021  
-0022  &lt;/head&gt;
-0023  &lt;body&gt;
-0024      &lt;form id=&quot;form1&quot; runat=&quot;server&quot;&gt;
-0025          &lt;div&gt;
-0026              Customer name&lt;br /&gt;
-0027              &lt;asp:TextBox ID=&quot;textboxCustomerName&quot; runat=&quot;server&quot; placeholder=&quot;Customer name&quot;
-0028                           EnableViewState=&quot;False&quot; ClientIDMode=&quot;Static&quot;&gt;&lt;/asp:TextBox&gt;
-0029              &lt;br /&gt;
-0030              Customer number &lt;br /&gt;
-0031              &lt;asp:TextBox ID=&quot;textboxCustomerNumber&quot; runat=&quot;server&quot; placeholder=&quot;Customer number&quot;
-0032                           EnableViewState=&quot;False&quot; ClientIDMode=&quot;Static&quot;&gt;&lt;/asp:TextBox&gt;
-0033          &lt;/div&gt;
-0034      &lt;/form&gt;
-0035  
-0036      &lt;script src=&quot;/public/vendor/jquery/dist/jquery.min.js&quot;&gt;&lt;/script&gt;
-0037      &lt;script src=&quot;/public/vendor/jquery-ui/jquery-ui.min.js&quot;&gt;&lt;/script&gt;
-0038      &lt;script src=&quot;/public/vendor/underscore/underscore.js&quot;&gt;&lt;/script&gt;
-0039      &lt;script src=&quot;/public/js/ASNAHelpers.QueryInputArgs.js&quot;&gt;&lt;/script&gt;
-0040      &lt;script src=&quot;/public/js/AutoComplete.aspx.js&quot; &gt;&lt;/script&gt;
-0041  &lt;/body&gt;
-0042  &lt;/html&gt;
+0003  &lt;!DOCTYPE html&gt;
+0004  
+0005  &lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot; &gt;
+0006  &lt;head runat=&quot;server&quot;&gt;
+0007      &lt;title&gt;Example AutoComplete&lt;/title&gt;
+0008      &lt;link rel=&quot;stylesheet&quot; href=&quot;/public/vendor/jquery-ui/themes/smoothness/jquery-ui.min.css&quot;&gt;
+0009      &lt;link rel=&quot;stylesheet&quot; href=&quot;/public/css/jQueryAutoComplete.css&quot;&gt;
+0010  &lt;/head&gt;
+0011  &lt;body&gt;
+0012      &lt;form id=&quot;form1&quot; runat=&quot;server&quot;&gt;
+0013      &lt;div&gt;
+0014          Customer name&lt;br /&gt;
+0015          &lt;asp:TextBox ID=&quot;textboxCustomerName&quot; runat=&quot;server&quot; placeholder=&quot;Customer name&quot;
+0016                       EnableViewState=&quot;False&quot; ClientIDMode=&quot;Static&quot;&gt;&lt;/asp:TextBox&gt;
+0017          &lt;br /&gt;
+0018          Customer number &lt;br /&gt;
+0019          &lt;asp:TextBox ID=&quot;textboxCustomerNumber&quot; runat=&quot;server&quot; placeholder=&quot;Customer number&quot;
+0020                       EnableViewState=&quot;False&quot; ClientIDMode=&quot;Static&quot;&gt;&lt;/asp:TextBox&gt;
+0021      &lt;/div&gt;
+0022      &lt;/form&gt;
+0023  
+0024      &lt;script src=&quot;/public/vendor/jquery/dist/jquery.min.js&quot;&gt;&lt;/script&gt;
+0025      &lt;script src=&quot;/public/vendor/jquery-ui/jquery-ui.min.js&quot;&gt;&lt;/script&gt;
+0026      &lt;script src=&quot;/public/vendor/underscore/underscore.js&quot;&gt;&lt;/script&gt;
+0027      &lt;script src=&quot;/public/js/ASNAHelpers.QueryInputArgs.js&quot;&gt;&lt;/script&gt;
+0028      &lt;script src=&quot;/public/js/AutoComplete.aspx.js&quot; &gt;&lt;/script&gt;
+0029  &lt;/body&gt;
+0030  &lt;/html&gt;
+</pre>
+
+Example JavaScript needed to provide a jQueryUI AutoComplete for the ASPX page shown above:
+
+<pre>0001  $(function () {
+0002      var ACCustomerName = new ASNAHelpers.QueryInputArgs();
+0003      ACCustomerName.url = "../services/jsonservice.ashx";
+0004      ACCustomerName.Library = "examples";
+0005      ACCustomerName.File = "cmastnewl2";
+0006      ACCustomerName.FieldsList = "cmname:label,cmcustno:value";
+0007      ACCustomerName.Rows = 12;
+0008      ACCustomerName.Query = "CMNAME >= '{CMNAME}'";
+0009      ACCustomerName.addQueryParm("CMNAME");
+0010      ACCustomerName.addOption("labelTargetId", "textboxCustomerName");
+0011      ACCustomerName.addOption("labelValueId", "textboxCustomerNumber");
+0012      ACCustomerName.addOption("showLabelOnScroll", true);
+0013      ASNAHelpers.autoComplete.registerQuery(ACCustomerName);
+0014  });
+</pre>
+
+The ASNA.Helpers.ASPNET database components expect to find the DataGate database name indirectly referenced by the `appSettings` key `ActiveDBName` in `Web.config.` At the least your app needs to provide two `appSettings` keys: one for `ActiveDBName` and one being referenced by the `ActiveDBName` key value. This scheme lets you provide as many database names as necessary in `Web.config`, while using `ActiveDBName` to indicate which one is currently the active database name.
+
+<pre>0001  &lt;?xml version=&quot;1.0&quot;?&gt;
+0002  &lt;!--
+0003    For more information on how to configure your ASP.NET application, please visit
+0004    http://go.microsoft.com/fwlink/?LinkId=169433
+0005    --&gt;
+0006  &lt;configuration&gt;
+0007    &lt;appSettings&gt;
+0008      &lt;add key=&quot;ActiveDBName&quot; value=&quot;local&quot;/&gt;
+0009      &lt;add key=&quot;Local&quot; value=&quot;*Public/DG NET Local&quot;/&gt;
+0010      &lt;add key=&quot;Cypress&quot; value=&quot;*Public/Cypress&quot;/&gt;
+0011    &lt;/appSettings&gt;
+0012    &lt;system.web&gt;
+0013      &lt;compilation debug=&quot;true&quot; targetFramework=&quot;4.5&quot;/&gt;
+0014    &lt;/system.web&gt;
+0015  &lt;/configuration&gt;
+</pre>
+
+The appSettings-driven database naming scheme above is required for the ASNA.Helpers.ASPNET database components. The code below shows how to fetch the active database name from the `appSettings` keys if you want to use the values in your own code.
+
+<pre>DclFld ActiveDBName  Type(*String)
+DclFld DBName        Type(*String) 
+
+ActiveDBName = System.Configuration.ConfigurationManager.AppSettings["ActiveDBName"]
+DBName = System.Configuration.ConfigurationManager.AppSettings[ActiveDBName]
+// DBName now contains the name of the currently active DataGate database name.
 </pre>
