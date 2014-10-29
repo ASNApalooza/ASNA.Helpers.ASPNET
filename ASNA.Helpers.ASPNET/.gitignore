@@ -6,7 +6,7 @@
 .project
 .metadata
 tmp/
-public/vendor/
+#public/vendor/
 *.tmp
 *.bak
 *.swp
@@ -132,7 +132,7 @@ Desktop.ini
 # Packages
 *.egg
 *.egg-info
-dist
+#dist
 build
 eggs
 parts
