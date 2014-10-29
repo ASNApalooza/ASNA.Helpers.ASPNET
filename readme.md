@@ -81,3 +81,48 @@ The `asna-helpers-dataservices` package has a dependence on the `asna-helpers-da
 
 asdf
        
+
+<pre>
+0001  &lt;%@ Page Language=&quot;AVR&quot; AutoEventWireup=&quot;false&quot; CodeFile=&quot;AutoComplete.aspx.vr&quot; Inherits=&quot;views_AutoComplete&quot; %&gt;
+0002  
+0003  &lt;!DOCTYPE html&quot;&gt;
+0004  &lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot; &gt;
+0005  &lt;head runat=&quot;server&quot;&gt;
+0006      &lt;title&gt;Example AutoComplete&lt;/title&gt;
+0007  
+0008     &lt;link rel=&quot;stylesheet&quot; href=&quot;/public/vendor/jquery-ui/themes/smoothness/jquery-ui.min.css&quot;&gt;
+0009  
+0010     &lt;style&gt;
+0011     .ui-autocomplete-loading {
+0012      background-image: url(&#39;/public/images/concentric-spinner.gif&#39;);
+0013      background-position: 98% 50%;
+0014      background-repeat: no-repeat;
+0015  }
+0016  
+0017      .my-ui-icon-alert {
+0018          background: white url(&#39;../images/icon-alert.png&#39;) right center no-repeat;
+0019      }
+0020  &lt;/style&gt;
+0021  
+0022  &lt;/head&gt;
+0023  &lt;body&gt;
+0024      &lt;form id=&quot;form1&quot; runat=&quot;server&quot;&gt;
+0025          &lt;div&gt;
+0026              Customer name&lt;br /&gt;
+0027              &lt;asp:TextBox ID=&quot;textboxCustomerName&quot; runat=&quot;server&quot; placeholder=&quot;Customer name&quot;
+0028                           EnableViewState=&quot;False&quot; ClientIDMode=&quot;Static&quot;&gt;&lt;/asp:TextBox&gt;
+0029              &lt;br /&gt;
+0030              Customer number &lt;br /&gt;
+0031              &lt;asp:TextBox ID=&quot;textboxCustomerNumber&quot; runat=&quot;server&quot; placeholder=&quot;Customer number&quot;
+0032                           EnableViewState=&quot;False&quot; ClientIDMode=&quot;Static&quot;&gt;&lt;/asp:TextBox&gt;
+0033          &lt;/div&gt;
+0034      &lt;/form&gt;
+0035  
+0036      &lt;script src=&quot;/public/vendor/jquery/dist/jquery.min.js&quot;&gt;&lt;/script&gt;
+0037      &lt;script src=&quot;/public/vendor/jquery-ui/jquery-ui.min.js&quot;&gt;&lt;/script&gt;
+0038      &lt;script src=&quot;/public/vendor/underscore/underscore.js&quot;&gt;&lt;/script&gt;
+0039      &lt;script src=&quot;/public/js/ASNAHelpers.QueryInputArgs.js&quot;&gt;&lt;/script&gt;
+0040      &lt;script src=&quot;/public/js/AutoComplete.aspx.js&quot; &gt;&lt;/script&gt;
+0041  &lt;/body&gt;
+0042  &lt;/html&gt;
+</pre>
