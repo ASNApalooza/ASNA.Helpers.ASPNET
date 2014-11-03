@@ -178,11 +178,15 @@
             this.labelTargetId = inputs.Options["labelTargetId"] || null;
             this.valueTargetId = inputs.Options["labelValueId"] || null;
             this.showLabelOnScroll = inputs.Options["showLabelOnScroll"] || false;   
-            this.onSelect = inputs.Options["onSelect"] || null;
+            this.onSelect = inputs.onSelect || null;
 
             var successCallBack = function(json) {
                 if (json.list) {
                     if (json.list.length > 0) {
+                        if (typeof(inputs.onBeforeShowList) !== "undefined" && 
+                           (_.isFunction(inputs.onBeforeShowList))) {
+                            inputs.onBeforeShowList(json.list);
+                        }
                         add(json.list);
                     } else {
                         $(".ui-autocomplete-loading").addClass("my-ui-icon-alert");
@@ -225,8 +229,13 @@
                 $("#" + this.labelTargetId).text(ui.item.value);            
             }
 
-            if (typeof this.onSelect == "function") {
-                this.onSelect();
+            if (e.keyCode == 13 || e.keyCode == 9) {
+                console.log("stopping prop");
+                e.stopPropagation();
+            }
+
+            if (typeof(this.onSelect) === "function") {
+                this.onSelect(e,ui);
             }
 
             return result;
@@ -250,7 +259,6 @@
 
             $("#" + inputs.Options["labelTargetId"]).autocomplete({
                 source: function(req,add) {                    
-                    // inputs.url = "../services/jsontest.ashx";
                     inputs.ownerId = this.element.context.id; 
                     inputs.QueryParms[0]["FieldValue"] = req.term;
                     autocompleteHelper.source(req,add,inputs);
